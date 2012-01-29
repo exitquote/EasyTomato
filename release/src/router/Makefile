@@ -36,6 +36,7 @@ obj-y += others
 obj-y += busybox
 obj-y += httpd
 obj-y += www
+obj-y += easytomatoscripts
 obj-y += bridge
 obj-y += dnsmasq
 obj-y += etc
@@ -580,6 +581,11 @@ httpd: shared nvram mssl
 www-install:
 	@$(MAKE) -C www install INSTALLDIR=$(INSTALLDIR)/www TOMATO_EXPERIMENTAL=$(TOMATO_EXPERIMENTAL)
 
+easytomatoscripts-install:
+	mkdir -p $(TARGETDIR)/easytomato
+	cp easytomato/.adblocker.sh $(TARGETDIR)/easytomato/.
+	cp easytomato/.autorun $(TARGETDIR)/easytomato/.
+
 matrixssl:
 	@$(SEP)
 	@$(MAKE) -C matrixssl/src
@@ -1022,7 +1028,7 @@ libbcm-install:
 iproute2:
 	@$(SEP)
 	@$(MAKE) -C $@ KERNEL_INCLUDE=$(LINUXDIR)/include EXTRACFLAGS="$(EXTRACFLAGS) $(if $(TCONFIG_IPV6),-DUSE_IPV6,-DNO_IPV6)"
-	
+
 iproute2-install: iproute2
 	install -D iproute2/tc/tc $(INSTALLDIR)/iproute2/usr/sbin/tc
 	$(STRIP) $(INSTALLDIR)/iproute2/usr/sbin/tc
